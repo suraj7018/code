@@ -1,0 +1,71 @@
+#include <bits/stdc++.h> 
+/*************************************************************
+
+    Following is the Binary Tree node structure
+
+    template <typename T>
+
+    class BinaryTreeNode
+    {
+    public :
+        T data;
+        BinaryTreeNode<T> *left;
+        BinaryTreeNode<T> *right;
+
+        BinaryTreeNode(T data) {
+            this -> data = data;
+            left = NULL;
+            right = NULL;
+        }
+
+        ~BinaryTreeNode() {
+            if (left)
+            {
+                delete left;
+            }
+            if (right)
+            {
+                delete right;
+            }
+        }
+    };
+
+*************************************************************/
+
+pair<int, int> predecessorSuccessor(BinaryTreeNode<int>* root, int key) {
+    int pred = -1; // Predecessor
+    int succ = -1; // Successor
+    BinaryTreeNode<int>* curr = root;
+
+    while (curr != nullptr) {
+        if (curr->data == key) {
+            // Key node found, now find predecessor and successor
+            if (curr->left != nullptr) {
+                // Find the maximum value in the left subtree (predecessor)
+                BinaryTreeNode<int>* predNode = curr->left;
+                while (predNode->right != nullptr)
+                    predNode = predNode->right;
+                pred = predNode->data;
+            }
+            if (curr->right != nullptr) {
+                // Find the minimum value in the right subtree (successor)
+                BinaryTreeNode<int>* succNode = curr->right;
+                while (succNode->left != nullptr)
+                    succNode = succNode->left;
+                succ = succNode->data;
+            }
+            return make_pair(pred, succ);
+        } else if (curr->data > key) {
+            // Move to the left subtree
+            succ = curr->data;
+            curr = curr->left;
+        } else {
+            // Move to the right subtree
+            pred = curr->data;
+            curr = curr->right;
+        }
+    }
+
+    return make_pair(pred, succ);
+}
+
