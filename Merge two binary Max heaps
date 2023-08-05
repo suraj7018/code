@@ -1,0 +1,49 @@
+class Solution {
+public:
+    void heapify(std::vector<int>& arr, int n, int index) {
+        int largest = index;
+        int left = 2 * index + 1;
+        int right = 2 * index + 2;
+
+        if (left < n && arr[largest] < arr[left]) {
+            largest = left;
+        }
+
+        if (right < n && arr[largest] < arr[right]) {
+            largest = right;
+        }
+
+        if (largest != index) {
+            std::swap(arr[index], arr[largest]);
+            heapify(arr, n, largest);
+        }
+    }
+
+    std::vector<int> mergeHeaps(std::vector<int>& a, std::vector<int>& b, int n, int m) {
+        // merge two sorted arrays
+        std::vector<int> ans;
+        
+        // Merge vectors a and b into the ans vector
+        int i = 0, j = 0;
+        while (i < n && j < m) {
+            if (a[i] < b[j]) {
+                ans.push_back(a[i++]);
+            } else {
+                ans.push_back(b[j++]);
+            }
+        }
+        while (i < n) {
+            ans.push_back(a[i++]);
+        }
+        while (j < m) {
+            ans.push_back(b[j++]);
+        }
+
+        // Now, convert ans into a max heap
+        int c = ans.size();
+        for (int index = c / 2 - 1; index >= 0; index--) {
+            heapify(ans, c, index);
+        }
+        return ans;
+    }
+};
