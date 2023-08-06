@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int main(){
+    // creation done
+    unordered_map<string, int> mp;
+
+    // insertioin
+    // 1
+    pair<string,int> p = make_pair("suraj",4);
+    mp.insert(p);
+
+    // 2
+    pair<string,int> pair2("babbar",3);
+    mp.insert(pair2);
+
+    // 3
+    mp["mera"] = 2;
+
+
+    // now come on searching
+    cout<<mp["suraj"]<<endl;
+    cout<<mp.at("babbar")<<endl;
+
+    //  agar mp[mannu] banaya to pahle hi data store hio jata hai that why they prinnt 2 zero
+    cout<<mp["mannu"]<<endl;
+    cout<<mp.at("mannu")<<endl;
+
+    // size
+    cout<<mp.size()<<endl;
+
+    // to check the presence
+    cout<<mp.count("suraj")<<endl;
+
+    // erase
+    mp.erase("suraj");
+    cout<<mp.count("suraj")<<endl;
+    cout<<mp.size()<<endl;
+
+    // iterator
+    unordered_map<string, int> :: iterator it = mp.begin();
+
+    while (it !=mp.end())
+    {
+        cout<< it ->first <<"  "<< it ->second<<endl;
+        it++;
+    }
+    
+
+    return 0;
+}
