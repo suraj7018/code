@@ -1,0 +1,93 @@
+#include<iostream>
+using namespace std;
+
+class trienode{
+    public:
+    char data;
+    trienode* children[26];
+    bool isterminal;
+
+    trienode(char ch){
+        this ->data = ch;
+        for (int  i = 0; i < 26; i++)
+        {
+            children[i] = NULL;
+        }
+        isterminal = false;
+        
+    }
+};
+
+class trie{
+    public:
+    trienode* root;
+    trie(){
+        root = new trienode('\0');
+    }
+
+    void insertuntil(trienode* root, string str){
+        // base case
+        if(str.size()==0){
+            root ->isterminal = true;
+            return;
+        }
+        
+        // assumption  == string are in capital word;
+        int index = str[0]-'a';
+        trienode* child;
+
+        if(root ->children[index]!=NULL){
+           child = root ->children[index];
+        }
+        else{
+            child = new trienode(str[0]);
+            root ->children[index] = child;
+        }
+
+        //  recursive call
+        insertuntil(child, str.substr(1));
+
+    }
+
+    void insertword(string str){
+        insertuntil(root, str);
+    }
+
+    bool searchutil(trienode* root, string str){
+        // base case
+        if(str.length() == 0){
+            return root ->isterminal;
+        }
+
+        int index = str[0]-'a';
+        trienode* child;
+
+        if(root ->children[index]!=NULL){
+            child = root ->children[index];
+        }
+        else{
+            return false;
+        }
+
+        // recursive call
+        return searchutil(child, str.substr(1));
+    }
+
+    bool searchstr(string str){
+        return searchutil(root, str);
+      
+    }
+};
+
+int main(){
+    trie *t = new trie();
+    t->insertword("surajkumar");
+    t->insertword("suraj");
+    t->insertword("time");
+    t->insertword("study");
+
+    cout<<"present or not "<<t->searchstr("surajkumar")<<endl;
+    cout<<"present or not "<<t->searchstr("my name")<<endl;
+    cout<<"present or not "<<t->searchstr("time")<<endl;
+    return 0;
+}
