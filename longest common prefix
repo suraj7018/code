@@ -24,3 +24,104 @@ string longestCommonPrefix(vector<string> &arr, int n)
 }
 
 
+
+
+
+
+
+/////////////////////////////////////////////////////////////
+// 2nd approch
+
+
+class trienode{
+    public:
+    char data;
+    trienode* children[26];
+    bool isterminal;
+    int countchild;
+
+    trienode(char ch){
+        this ->data = ch;
+        for (int  i = 0; i < 26; i++)
+        {
+            children[i] = NULL;
+        }
+        isterminal = false;
+        countchild = 0;
+        
+    }
+};
+
+class trie{
+    public:
+    trienode* root;
+    trie(char ch) { 
+        root = new trienode(ch);
+  }
+
+  void insertuntil(trienode* root, string str){
+        // base case
+        if(str.size()==0){
+            root ->isterminal = true;
+            return;
+        }
+        
+        // assumption  == string are in capital word;
+        int index = str[0]-'a';
+        trienode* child;
+
+        if(root ->children[index]!=NULL){
+           child = root ->children[index];
+        }
+        else{
+            child = new trienode(str[0]);
+            root ->countchild++;
+            root ->children[index] = child;
+        }
+
+        //  recursive call
+        insertuntil(child, str.substr(1));
+
+    }
+
+    void insertword(string str){
+        insertuntil(root, str);
+    }
+
+    void lcp(string str, string &ans){
+        for(int i=0;i<str.length();i++){
+            char ch = str[i];
+
+            if(root ->countchild==1){
+                ans.push_back(ch);
+
+                // ab aage bad jao;
+                int index = ch-'a';
+                root = root->children[index];
+            }
+            else{
+                break;
+            }
+            if(root->isterminal){
+                break;
+            }
+        }
+    }
+
+};
+
+string
+longestCommonPrefix(vector<string> &arr, int n) {
+    trie *t = new trie('\0');
+
+    for(int i=0;i<n;i++){
+        t->insertword(arr[i]);
+    } 
+    string first = arr[0];
+    string ans ="";
+
+    t->lcp(first, ans);
+    return ans;
+
+}
+
