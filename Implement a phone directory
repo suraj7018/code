@@ -1,0 +1,114 @@
+class trienode{
+    public:
+    char data;
+    trienode* children[26];
+    bool isterminal;
+
+    trienode(char ch){
+        this ->data = ch;
+        for (int  i = 0; i < 26; i++)
+        {
+            children[i] = NULL;
+        }
+        isterminal = false;
+        
+    }
+};
+
+
+class trie{
+    public:
+    trienode* root;
+    trie(){
+        root = new trienode('\0');
+    }
+
+    void insertuntil(trienode* root, string str){
+        // base case
+        if(str.size()==0){
+            root ->isterminal = true;
+            return;
+        }
+        
+        // assumption  == string are in capital word;
+        int index = str[0]-'a';
+        trienode* child;
+
+        if(root ->children[index]!=NULL){
+           child = root ->children[index];
+        }
+        else{
+            child = new trienode(str[0]);
+            root ->children[index] = child;
+        }
+
+        //  recursive call
+        insertuntil(child, str.substr(1));
+
+    }
+
+    void insertword(string str){
+        insertuntil(root, str);
+    }
+
+     void printsuggestion(trienode* curr, vector<string> &temp, string prefstr) {
+    if (curr->isterminal) {
+        temp.push_back(prefstr);
+    }
+
+    for (char ch = 'a'; ch <= 'z'; ch++) {
+        trienode* next = curr->children[ch - 'a'];
+        if (next != NULL) {
+            string newPrefStr = prefstr; // Create a new copy of prefstr for each recursion
+            newPrefStr.push_back(ch);
+
+            // Recursive call
+            printsuggestion(next, temp, newPrefStr);
+        }
+    }
+}
+
+
+    vector<vector<string>> getsuggetioin(string str){
+        trienode* prev = root;
+        vector<vector<string>> ans;
+        string prefstr = "";
+        
+        for(int i=0;i<str.length();i++){
+            char lasrch = str[i];
+
+            prefstr.push_back(lasrch);
+
+            trienode* curr = prev->children[lasrch-'a'];
+
+            // if not found
+            if(curr == NULL){
+                break;
+            }
+            
+                // print all the suggestion
+                vector<string> temp;
+                printsuggestion(curr, temp, prefstr);
+                ans.push_back(temp);
+                temp.clear();
+                prev = curr;
+        }
+        return ans;
+    }
+};
+
+vector<vector<string>> phoneDirectory(vector<string>&contactList, string &queryStr)
+{
+    // creation of the trie;
+   trie *t = new trie();
+
+   // sare string ko trie me dal do;
+   for(int i=0;i<contactList.size();i++){
+       string star = contactList[i];
+       t->insertword(star);
+   }
+
+   // suggestion return karo
+   return t->getsuggetioin(queryStr);
+
+}
