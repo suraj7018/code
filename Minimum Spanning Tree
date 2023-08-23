@@ -1,0 +1,63 @@
+///////////////////////////////////////////////////////////////////
+using the kushkal's algo
+
+
+
+#include<bits/stdc++.h>
+bool cmp(vector<int> &a, vector<int> &b){
+  return a[2]< b[2];
+}
+
+void makeSet(vector<int> &parents, vector<int> rank, int n){
+  for(int i =0;i<n;i++){
+    parents[i] = i;
+    rank[i] = 0;
+  }
+}
+
+int findparents(vector<int> &parents, int node){
+   if(parents[node] == node)
+   {
+     return node;
+   }
+   // this is the compression of the path;
+   return parents[node] = findparents(parents, parents[node]);
+}
+
+void findunioin(int u, int v, vector<int> &parents, vector<int> &rank){
+  u = findparents(parents, u);
+  v = findparents(parents, v);
+
+  // noe compare the rank;
+  if(rank[u]< rank[v]){
+    parents[u] = v;
+  }
+  else if(rank[v] < rank[u]){
+    parents[v] = u;
+  }
+  else{
+    parents[u] =v;
+  }
+}
+
+int minimumSpanningTree(vector<vector<int>>& edges, int n)
+{
+  sort(edges.begin(), edges.end(), cmp);
+  vector<int> parents(n);
+  vector<int> rank(n);
+  makeSet(parents, rank,n);
+  int minwt = 0;
+
+  for(int i =0;i<edges.size();i++){
+    int wt = edges[i][2];
+    int u = findparents(parents, edges[i][0]);
+    int v = findparents(parents, edges[i][1]);
+
+    if (u != v) {
+
+      minwt = wt + minwt;
+      findunioin(u, v, parents, rank);
+    }
+  }
+  return minwt;
+}
