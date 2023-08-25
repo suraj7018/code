@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+#define MOD 1000000007
+
+int solve(int nStairs, std::vector<int>& ans, int i){
+    if(i == nStairs){
+        return 1;
+    }
+    if(i > nStairs){
+        return 0;
+    }
+
+    if(ans[i] != -1)
+        return ans[i];
+
+    ans[i] = (solve(nStairs, ans, i+1) + solve(nStairs, ans, i+2)) % MOD;
+    return ans[i];
+}
+
+int countDistinctWays(int nStairs) {
+    vector<int> ans(nStairs + 1, -1);
+    int ways = solve(nStairs, ans, 0);
+    return ways;
+}
