@@ -1,0 +1,61 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+void dfs(int node, unordered_map<int, bool> &vis, stack<int> &st, unordered_map<int, vector<int>> &adj) {
+    vis[node] = true;
+    for (int neighbor : adj[node]) {
+        if (!vis[neighbor]) {
+            dfs(neighbor, vis, st, adj);
+        }
+    }
+    st.push(node);
+}
+
+void revdfs(int node, unordered_map<int, bool> &vis, unordered_map<int, vector<int>> &adj) {
+    vis[node] = true;
+    for (int neighbor : adj[node]) {
+        if (!vis[neighbor]) {
+            revdfs(neighbor, vis, adj);
+        }
+    }
+}
+
+int stronglyConnectedComponents(int v, vector<vector<int>> &edges) {
+    // Adjacency list
+    unordered_map<int, vector<int>> adj;
+    for (const auto &edge : edges) {
+        int u = edge[0];
+        int v = edge[1];
+        adj[u].push_back(v);
+    }
+
+    // Topological sort
+    stack<int> st;
+    unordered_map<int, bool> vis;
+    for (int i = 0; i < v; i++) {
+        if (!vis[i]) {
+            dfs(i, vis, st, adj);
+        }
+    }
+
+    // Transpose graph
+    unordered_map<int, vector<int>> transpose;
+    for (int i = 0; i < v; i++) {
+        vis[i] = false;
+        for (int neighbor : adj[i]) {
+            transpose[neighbor].push_back(i);
+        }
+    }
+
+    // Count strongly connected components
+    int count = 0;
+    while (!st.empty()) {
+        int top = st.top();
+        st.pop();
+        if (!vis[top]) {
+            count++;
+            revdfs(top, vis, transpose);
+        }
+    }
+    return count;
+}
