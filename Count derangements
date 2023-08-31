@@ -1,0 +1,48 @@
+#include<bits/stdc++.h>
+#define MOD 1000000007
+long long int solve(int n, vector<long long int> &dp){
+    // base case;
+    if(n==0)
+    return 0;
+
+    if(n==1)
+    return 1;
+
+    if(dp[n] != -1)
+    return dp[n];
+
+    dp[n] = (((n-1)%MOD)*((solve(n-2,dp)%MOD)+(solve(n-1, dp)%MOD))%MOD);
+
+    return dp[n];
+}
+long long int countDerangements(int n) {
+    vector<long long int> dp(n+1, -1);
+     return solve(n, dp);
+}
+
+
+
+
+///////////////////////////////////////////
+
+#include<bits/stdc++.h>
+#define MOD 1000000007
+long long int solve(int n){
+    vector<long long int> dp(n+1, -1);
+    dp[1] = 0;
+    dp[2] = 1;
+
+    for(int i = 3; i<=n;i++){
+        long long int first = dp[i-1]%MOD;
+        long long int second = dp[i-2]%MOD;
+        long long int ans = (first+second)%MOD;
+        long long int ans1 = ((i-1)*ans)%MOD;
+        dp[i] = ans1;
+    }
+
+    return dp[n];
+}
+long long int countDerangements(int n) {
+    
+     return solve(n);
+}
