@@ -108,3 +108,42 @@ int solve(vector<int> &weight, vector<int> &value, int n, int capacity){
 int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight) {
     return solve(weight, value, n, maxWeight);
 }
+
+
+/////////////////////////////////////
+fastest solution
+
+#include <bits/stdc++.h> 
+
+int solve(vector<int> &weight, vector<int> &value, int n, int capacity){
+	// Step 1: Create the vector dp;
+	vector<int> curr(capacity+1, -1);
+
+	// Step 2: Analyze the base case;
+	for(int w = 0; w <= capacity; w++){
+		if(weight[0] <= w){
+			curr[w] = value[0];
+		}
+		else{
+			curr[w] = 0;
+		}
+	}
+
+	// Take care of the remaining recursive calls;
+	for(int index = 1; index < n; index++){
+		for(int w = capacity; w >= 0; w--){
+			int include = 0;
+			if(weight[index] <= w){
+				include = value[index] + curr[w - weight[index]];
+			}
+			int exclude = curr[w];
+
+			curr[w] = max(include, exclude);
+		}
+	}
+	return curr[capacity];
+}
+
+int knapsack(vector<int> weight, vector<int> value, int n, int maxWeight) {
+    return solve(weight, value, n, maxWeight);
+}
