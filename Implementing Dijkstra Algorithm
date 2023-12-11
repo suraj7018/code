@@ -1,0 +1,40 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    // Function to find the shortest distance of all the vertices
+    // from the source vertex S.
+    vector <int> dijkstra(int V, vector<vector<int>> adj[], int S)
+    {
+        // Code here
+        vector<int> distance(V , 1e9);
+        set<pair<int , int>> st;
+        st.insert({0 , S});
+        distance[S] = 0;
+        
+        while(!st.empty()){
+            auto it = *(st.begin());
+            int d = it.first;
+            int node = it.second;
+            st.erase(it);
+            
+            for(auto it2 : adj[node]){
+                int adjNode = it2[0];
+                int edgeWeight = it2[1];
+                
+                if(d+edgeWeight < distance[adjNode]){
+                    //better distance found
+                    if(distance[adjNode] != 1e9){
+                        //someone already visited this node
+                        st.erase({distance[adjNode] , adjNode});
+                    }
+                    distance[adjNode] = d+edgeWeight;
+                    st.insert({distance[adjNode] , adjNode});
+                }
+            }
+        }
+        
+        return distance;
+    }
+};
