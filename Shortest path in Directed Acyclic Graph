@@ -1,0 +1,51 @@
+class Solution {
+  public:
+  void dfs(int node,stack<int> &s, unordered_map<int,bool> &visited,  unordered_map<int,list<pair<int,int>>> adj){
+      visited[node]=true;
+      for(auto i: adj[node]){
+          if(!visited[i.first]){
+                dfs(i.first,s,visited,adj);
+          }
+      }
+      s.push(node);
+  }
+     vector<int> shortestPath(int N,int M, vector<vector<int>>& edges){
+         unordered_map<int,list<pair<int,int>>> adj;
+       for(int i=0;i<edges.size();i++){
+           int u=edges[i][0];
+           int v=edges[i][1];
+           int w=edges[i][2];
+            adj[u].push_back({v,w});
+       }
+    
+    unordered_map<int,bool> visited;
+    stack<int>s;
+    for(int i=0;i<N;i++){
+        if(!visited[i]){
+            dfs(i,s,visited,adj);
+        }
+    }
+    
+     vector<int>distance(N, INT_MAX);
+        int src = 0;
+        distance[src] = 0;
+        while(!s.empty()){
+            int i = s.top();
+            s.pop();
+            
+            if(distance[i] != INT_MAX){
+                for(auto neighbour: adj[i]){
+                    distance[neighbour.first] = min(distance[neighbour.first], distance[i]+neighbour.second);
+                }
+            }
+        }
+        for(int i=0; i<N; i++){
+            if(distance[i] == INT_MAX){
+                distance[i] = -1;
+            }
+        }
+        return distance;
+    }
+    
+    
+};
