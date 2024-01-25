@@ -1,0 +1,24 @@
+class Solution
+{
+    public:
+    int select(int arr[], int i)
+    {
+        // code here such that selectionSort() sorts arr[]
+    }
+     
+    void selectionSort(int arr[], int n)
+    {
+       int i, j, min_index;
+       for(i=0; i<n;i++){
+           min_index = i;
+           for(j=i+1; j<n;j++){
+               if(arr[j] < arr[min_index]){
+                   min_index = j;
+               }
+           }
+           // if min index is founded then swap that index with min_index;
+           if(min_index != i)
+           swap(arr[i], arr[min_index]);
+       }
+    }
+};
