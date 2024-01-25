@@ -1,0 +1,21 @@
+class Solution
+{
+    public:
+    //Function to sort the array using bubble sort algorithm.
+    void bubbleSort(int arr[], int n)
+    {
+        for(int i=0;i<n;i++){
+            bool swapped;
+            for(int j= 0;j<n-i-1;j++){
+                if(arr[j]> arr[j+1]){
+                    swap(arr[j], arr[j+1]);
+                    swapped = true;
+                }
+            }
+            
+            // if element not swapped then we have to come out of the loop though break;
+            if(swapped == false)
+            break;
+        } 
+    }
+};
