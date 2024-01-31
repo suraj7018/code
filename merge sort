@@ -1,0 +1,55 @@
+class Solution
+{
+public:
+    void merge(int arr[], int low, int mid, int high) {
+    int leftSize = mid - low + 1;
+    int rightSize = high - mid;
+
+    int left[leftSize];
+    int right[rightSize];
+
+    // Copy data to temporary arrays left[] and right[]
+    for (int i = 0; i < leftSize; i++)
+        left[i] = arr[low + i];
+    for (int j = 0; j < rightSize; j++)
+        right[j] = arr[mid + 1 + j];
+
+    // Merge the temporary arrays back into arr[low..high]
+    int i = 0; // Initial index of left subarray
+    int j = 0; // Initial index of right subarray
+    int k = low; // Initial index of merged subarray
+
+    while (i < leftSize && j < rightSize) {
+        if (left[i] <= right[j]) {
+            arr[k++] = left[i++];
+        } else {
+            arr[k++] = right[j++];
+        }
+    }
+
+    // Copy the remaining elements of left[], if there are any
+    while (i < leftSize) {
+        arr[k++] = left[i++];
+    }
+
+    // Copy the remaining elements of right[], if there are any
+    while (j < rightSize) {
+        arr[k++] = right[j++];
+    }
+}
+
+    public:
+    void mergeSort(int arr[], int low, int high) {
+    if (low < high) {
+        // Same as (low + high) / 2, but avoids overflow for large low and high
+        int mid = low + (high - low) / 2;
+
+        // Sort first and second halves
+        mergeSort(arr, low, mid);
+        mergeSort(arr, mid + 1, high);
+
+        // Merge the sorted halves
+        merge(arr, low, mid, high);
+    }
+}
+};
